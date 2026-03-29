@@ -8,7 +8,7 @@ this guide explains how to use and maintain the **fastmax's client archive**. fo
 ---
 
 ### getting started
-* **install the file**: click "HTML for the client archive" under the Releases tab. now click the ClientArchive.html link and it should work.
+* **install the file**: click "[HTML for the client archive](https://github.com/fastmaxcode/fastmaxs-client-archive/releases/tag/hackedclients)" under the Releases tab. now click the `ClientArchive.html` link and it should work.
 * **install the file (easy)**: [click this link](https://github.com/fastmaxcode/fastmaxs-client-archive/releases/download/hackedclients/ClientArchive.html)
 * * **open the file**: double-click `ClientArchive.html` in any modern web browser.
 * **navigation**: use the top tabs to switch between different categories like **java edition**, **java cracked**, **rise cracks**, and **bedrock**.
@@ -26,4 +26,4 @@ this guide explains how to use and maintain the **fastmax's client archive**. fo
 * **physics bounce**: click on the empty background (the liquid blobs) to trigger a "bounce" animation across all elements on the page.
 * **reduced motion**: if your system has "reduce motion" enabled, animations will automatically disable for better performance.
 
-### **I DO NOT CONDONE CHEATING NOR CRACKING CLIENTS/PIRATING CLIENTS!**
+### **I DO NOT CONDONE CHEATING NOR CRACKING CLIENTS/PIRATING CLIENTS!!**
