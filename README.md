@@ -1,6 +1,4 @@
-# fastmax's client archive.
-I DO NOT CONDONE CHEATING NOR CRACKING CLIENTS. 
-
+### fastmax's client archive.
 ---
 
 ## Instructions for the client archive.
