@@ -1,2 +1,2 @@
-# fastmaxs-client-archive
-bedrock client archive.
+# fastmax's client archive.
+I DO NOT CONDONE CHEATING NOR CRACKING CLIENTS. 
