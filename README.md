@@ -10,7 +10,7 @@ this guide explains how to use and maintain the **fastmax's client archive**. fo
 ### getting started
 * **install the file**: click "[HTML for the client archive](https://github.com/fastmaxcode/fastmaxs-client-archive/releases/tag/hackedclients)" under the Releases tab. now click the `ClientArchive.html` link and it should work.
 * **install the file (easy)**: [click this link](https://github.com/fastmaxcode/fastmaxs-client-archive/releases/download/hackedclients/ClientArchive.html)
-* * **open the file**: double-click `ClientArchive.html` in any modern web browser.
+* **open the file**: double-click `ClientArchive.html` in any modern web browser.
 * **navigation**: use the top tabs to switch between different categories like **java edition**, **java cracked**, **rise cracks**, and **bedrock**.
 * **search**: type the name of a specific client into the search bar at the top to filter the grid instantly.
 
