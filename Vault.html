@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fastmaxs client archive in a html</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #fbf6f0 0%, #fff2dd 35%, #ffe5c2 70%, #ffd596 100%);
+            --glass: rgba(255, 255, 255, 0.22);
+            --glass-border: rgba(255, 255, 255, 0.28);
+            --text-color: #ffffff; /* user requested white text */
+            --card-hover: rgba(255, 213, 150, 0.25);
+
+            /* font stack - SF Pro primary */
+            --font-main: "SF Pro Display", "SF Pro Text", "-apple-system", "BlinkMacSystemFont", "Segoe UI", Roboto, "Product Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+
+            /* animation system */
+            --anim-fast: 220ms;
+            --anim-medium: 420ms;
+            --anim-slow: 900ms;
+            --stagger-step: 65ms;
+            --ease-spring: cubic-bezier(.22,1,.36,1);
+            --ease-smooth: cubic-bezier(.25,.46,.45,.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-main);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            background-size: 400% 400%;
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            animation: gradient-move 20s ease infinite;
+        }
+            .client-card::after,
+            .dropdown-item::after{
+            content:"";
+            position:absolute;
+            inset:0;
+            border-radius:inherit;
+            background:
+                radial-gradient(
+                600px circle at var(--x) var(--y),
+                rgba(255,255,255,0.35),
+                transparent 45%
+                );
+            opacity:0;
+            transition:.4s;
+            pointer-events:none;
+            }
+        @media (prefers-reduced-motion: reduce){
+        *{
+            animation:none!important;
+            transition:none!important;
+        }
+        }
+
+        .client-card:hover::after,
+        .dropdown-item:hover::after{
+        opacity:1;
+        }
+
+
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        /* subtle dark overlay above blobs to improve foreground contrast */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background: linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.035));
+        }
+
+        .blob {
+            position: absolute;
+            background: rgba(255, 213, 150, 0.28); /* #ffd596 pastel */
+            filter: blur(40px);
+            border-radius: 50%;
+            animation: move-around 22s infinite alternate ease-in-out;
+            mix-blend-mode: screen;
+        }
+        @keyframes move-around {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 50%; }
+            20% { transform: translate(150px, 100px) scale(1.3) rotate(72deg); border-radius: 40% 60% 70% 30%; }
+            40% { transform: translate(100px, 250px) scale(0.9) rotate(144deg); border-radius: 60% 40% 30% 70%; }
+            60% { transform: translate(-80px, 200px) scale(1.1) rotate(216deg); border-radius: 70% 30% 60% 40%; }
+            80% { transform: translate(-100px, 100px) scale(0.85) rotate(288deg); border-radius: 30% 70% 40% 60%; }
+            100% { transform: translate(180px, 80px) scale(1.15) rotate(360deg); border-radius: 50%; }
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 20px;
+        }
+
+        header h1 {
+            font-size: 84px;
+            font-weight: 700;
+            letter-spacing: -3.5px;
+            text-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            transition: transform var(--anim-medium) var(--ease-spring), text-shadow var(--anim-medium) var(--ease-smooth);
+            cursor: pointer;
+            color: var(--text-color);
+            position: relative;
+            transform-origin: center;
+            opacity: 0;
+            transform: translateY(8px) scale(.995);
+        }
+
+        header h1.enter {
+            animation: header-pop var(--anim-medium) var(--ease-spring) both;
+        }
+
+        header h1:hover {
+            transform: translateY(-8px) scale(1.05) rotate(-0.4deg);
+            text-shadow: 0 18px 40px rgba(0,0,0,0.28), 0 0 80px rgba(255,255,255,0.35);
+        }
+
+        @keyframes header-pop {
+            0% { opacity: 0; transform: translateY(18px) scale(.98); }
+            60% { opacity: 1; transform: translateY(-6px) scale(1.04); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        #searchBar {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            color: var(--text-color);
+            font-size: 18px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        #searchBar::placeholder { 
+            color: rgba(255,255,255,0.7);
+        }
+        
+        #searchBar:focus { 
+            background: rgba(255,255,255,0.35); 
+            box-shadow: 0 0 40px rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+            border: 1px solid var(--glass-border);
+            padding: 12px 40px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            letter-spacing: -0.2px;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.25));
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            color: var(--text-color);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25), inset 0 2px 4px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            padding: 0 20px 100px;
+        }
+
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .client-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.22));
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 24px;
+            transition: transform var(--anim-fast), box-shadow 240ms var(--ease-smooth), opacity 240ms var(--ease-smooth);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 300px;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+            transform-origin: center;
+            /* entrance state */
+            opacity: 0;
+            transform: translateY(14px) scale(.995);
+        }
+
+        /* entrance pop for cards */
+        .client-card.enter {
+            animation: card-pop var(--anim-medium) var(--ease-spring) both;
+            animation-delay: calc(var(--i, 0) * var(--stagger-step));
+        }
+
+        @keyframes card-pop {
+            0% { opacity: 0; transform: translateY(20px) scale(.98); }
+            70% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes floaty{
+            0%{transform: translateY(0)}
+            50%{transform: translateY(-6px)}
+            100%{transform: translateY(0)}
+        }
+
+        .client-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .client-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.26));
+            box-shadow: 0 18px 45px rgba(0,0,0,0.08), 0 0 18px rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .client-card:hover::before {
+            opacity: 1;
+        }
+
+        .client-name { 
+            font-size: 24px; 
+            font-weight: 700; 
+            margin-bottom: 10px;
+            color: var(--text-color);
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .client-desc { 
+            font-size: 15px; 
+            opacity: 1; 
+            line-height: 1.5; 
+            font-weight: 400;
+        }
+
+        /* Brighten all textual elements and override inline opacity where needed */
+        p, h1, h2, h3, h4, h5, h6, span, a, label, .client-desc, .tab-btn, .tag, .btn, .client-card, .client-name {
+            color: var(--text-color) !important;
+            opacity: 1 !important;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.04);
+        }
+
+        .tag-row { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            margin-top: 20px; 
+        }
+        
+        .tag { 
+            font-size: 11px; 
+            font-weight: 700; 
+            padding: 6px 12px; 
+            border-radius: 999px; 
+            background: linear-gradient(90deg, rgba(255,255,255,0.22), rgba(255,243,220,0.22));
+            text-transform: uppercase;
+            transition: transform 0.18s ease, background 0.18s;
+            display: inline-flex; align-items:center; gap:6px;
+            letter-spacing: 0.4px;
+        }
+
+        .tag::before{ content:''; display:inline-block; transform:translateY(1px); }
+
+        .tag:hover {
+            transform: translateY(-4px) scale(1.04);
+            background: linear-gradient(90deg, rgba(255,255,255,0.32), rgba(255,243,220,0.32));
+        }
+        
+        .tag.paid { 
+            color: var(--text-color); 
+            background: rgba(255, 224, 130, 0.2); 
+        }
+        
+        .tag.free { 
+            color: var(--text-color); 
+            background: rgba(185, 246, 202, 0.2); 
+        }
+
+        .btn { 
+            margin-top: 18px; 
+            background: linear-gradient(135deg, #fffaf0, #fff6e6); 
+            color: var(--text-color); 
+            text-align: center; 
+            padding: 12px; 
+            border-radius: 14px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            transition: transform var(--anim-fast) var(--ease-smooth), box-shadow var(--anim-fast) var(--ease-smooth), filter var(--anim-fast) ease;
+            display: inline-block;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,230,180,0.6);
+            letter-spacing: -0.2px;
+        }
+
+        .btn::after{ content:''; margin-left:0 }
+
+        .btn:hover { 
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 14px 36px rgba(0,0,0,0.08), 0 0 12px rgba(255,255,255,0.4);
+        }
+
+        .hidden { 
+            display: none !important; 
+        }
+
+        /* Animation system: smoother transitions and bounce */
+        :root {
+            --anim-duration: 700ms;
+            --bounce-ease: cubic-bezier(.2,1,.3,1);
+            --stagger-step: 65ms;
+        }
+
+        .animated {
+            transition: transform var(--anim-duration) var(--bounce-ease), box-shadow 300ms ease, opacity 200ms ease;
+            will-change: transform;
+        }
+
+        header h1, .client-card, .tab-btn, .btn, .tag, .client-name, .client-desc {
+            transition: transform var(--anim-duration) var(--bounce-ease), opacity 200ms ease, box-shadow 220ms ease;
+            transform-origin: center;
+        }
+
+        .do-bounce .client-card,
+        .do-bounce header,
+        .do-bounce .tab-btn,
+        .do-bounce .btn,
+        .do-bounce .tag,
+        .do-bounce .client-name {
+            animation-name: bounce-smooth;
+            animation-duration: var(--anim-duration);
+            animation-timing-function: var(--bounce-ease);
+            animation-fill-mode: both;
+            animation-delay: calc(var(--i, 0) * var(--stagger-step));
+        }
+
+        @keyframes bounce-smooth {
+            0% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(-20px) scale(1.03); }
+            60% { transform: translateY(6px) scale(0.995); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        /* keep floaty but gentler while animations active */
+        .client-card { animation: floaty 6s ease-in-out infinite; }
+        .liquid-bg .blob { animation-duration: 24s; }
+
+        @media (prefers-reduced-motion: reduce) {
+            :root { --anim-duration: 0ms; --stagger-step: 0ms; }
+            .do-bounce * { animation: none !important; transition: none !important; }
+        }
+
+        /* Hover micro-interactions (only when user hasn't requested reduced motion) */
+        @media (prefers-reduced-motion: no-preference) {
+            :root { --hover-scale: 1.06; --hover-tilt: 2deg; }
+
+            header h1:hover {
+                transform: translateY(-8px) scale(calc(var(--hover-scale) - 0.02)) rotate(-0.6deg);
+                text-shadow: 0 18px 40px rgba(0,0,0,0.28), 0 0 80px rgba(255,255,255,0.35);
+            }
+
+            .tab-btn:hover {
+                transform: translateY(-6px) rotateX(2deg) scale(1.02);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            }
+            .tab-btn:active { transform: translateY(-2px) scale(0.995); }
+
+            .client-card:hover {
+                transform: translateY(-14px) scale(1.035) rotateX(1deg);
+                box-shadow: 0 28px 70px rgba(0,0,0,0.12), inset 0 2px 8px rgba(255,255,255,0.12);
+            }
+            .client-card:active { transform: translateY(-6px) scale(0.995); transition: transform 120ms ease; }
+
+            .btn:hover {
+                animation: pop-quick 420ms cubic-bezier(.2,1,.3,1);
+                box-shadow: 0 18px 40px rgba(0,0,0,0.12), 0 0 14px rgba(255,255,255,0.22);
+                transform-origin: center;
+            }
+
+            @keyframes pop-quick {
+                0% { transform: scale(1); }
+                45% { transform: scale(1.08); }
+                100% { transform: scale(1); }
+            }
+
+            .tag:hover {
+                transform: translateY(-6px) scale(1.08) rotate(-1deg);
+                box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+            }
+
+            /* subtle 3D tilt on pointer move for cards */
+            .client-card.tilt, .client-card.tilt * { will-change: transform; }
+        }
+
+        /* Download-button glitch: horizontal/skew jitter (no vertical jump) */
+        .btn.download {
+            transition: none;
+            will-change: transform;
+        }
+
+        @keyframes download-glitch {
+            0%   { transform: translateX(0) rotate(0deg) scale(1); }
+            12%  { transform: translateX(-8px) rotate(-3deg) scale(1.02); }
+            28%  { transform: translateX(10px) rotate(2.5deg) scale(0.985); }
+            48%  { transform: translateX(-6px) rotate(-1.5deg) scale(1.03); }
+            72%  { transform: translateX(6px) rotate(1.2deg) scale(0.99); }
+            100% { transform: translateX(0) rotate(0deg) scale(1); }
+        }
+
+        .btn.download:hover {
+            animation: download-glitch 420ms steps(6,end) forwards;
+        }
+
+    </style>
+</head>
+<script>
+document.querySelectorAll('.client-card,.dropdown-item').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect()
+    card.style.setProperty('--x',`${e.clientX-r.left}px`)
+    card.style.setProperty('--y',`${e.clientY-r.top}px`)
+  })
+})
+</script>
+<body>
+    <div class="liquid-bg">
+        <div class="blob" style="width: 600px; height: 600px; top: -10%; left: -10%; animation-delay: 0s; background: rgba(255,213,150,0.35);"></div>
+        <div class="blob" style="width: 500px; height: 500px; top: 40%; left: 70%; animation-delay: -5s; background: rgba(255,255,255,0.35);"></div>
+        <div class="blob" style="width: 450px; height: 450px; top: 70%; left: 10%; animation-delay: -10s; background: rgba(255,213,150,0.30);"></div>
+        <div class="blob" style="width: 400px; height: 400px; top: 20%; left: 50%; animation-delay: -3s; background: rgba(255,255,255,0.20);"></div>
+        <div class="blob" style="width: 350px; height: 350px; top: 60%; left: 80%; animation-delay: -7s; background: rgba(255,213,150,0.28);"></div>
+    </div>
+
+    <header>
+        <h1>fastmax's client archive</h1>
+        <p style="font-size: 18px; opacity: 0.95; margin-top: 15px; font-style: italic; font-weight: 300;">the ultimate client collection</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchBar" placeholder="search clients..." oninput="filterClients()">
+    </div>
+
+    <div class="tabs">
+        <button id="btn-java" class="tab-btn active" onclick="showGrid('java')">java edition</button>
+        <button id="btn-java-cracked" class="tab-btn" onclick="showGrid('java-cracked')">java cracked</button>
+        <button id="btn-rise-cracks" class="tab-btn" onclick="showGrid('rise-cracks')">rise cracks</button>
+        <button id="btn-bedrock" class="tab-btn" onclick="showGrid('bedrock')">bedrock (1.21+)</button>
+    </div>
+
+    <div class="container">
+        <div id="java-grid" class="client-grid">
+            <div class="client-card">
+                <div>
+                    <div class="client-name">lunar client</div>
+                    <p class="client-desc">the most popular legal pvp client. boosts fps and includes essential mods.</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">PvP</span></div>
+                <a href="https://www.lunarclient.com/" class="btn">visit website</a>
+            </div>
+            
+            <div class="client-card">
+                <div>
+                    <div class="client-name">vape v4</div>
+                    <p class="client-desc">the gold standard for ghost clients. clean and undetectable.</p>
+                </div>
+                <div class="tag-row"><span class="tag paid">Paid</span><span class="tag">Ghost</span></div>
+                <a href="https://www.vape.gg/" class="btn">visit website</a>
+            </div>
+            
+            <div class="client-card">
+                <div>
+                    <div class="client-name">meteor</div>
+                    <p class="client-desc">modern fabric utility for technical play and anarchy servers.</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">Fabric</span></div>
+                <a href="https://meteorclient.com/" class="btn">visit website</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise</div>
+                    <p class="client-desc">beautiful visuals and powerful blatant bypasses for multiservers.</p>
+                </div>
+                <div class="tag-row"><span class="tag paid">Paid</span><span class="tag">Blatant</span></div>
+                <a href="https://riseclient.com/" class="btn">visit website</a>
+            </div>
+            
+            <div class="client-card">
+                <div>
+                    <div class="client-name">badlion client</div>
+                    <p class="client-desc">huge mod library and built-in anti-cheat for competitive play.</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">PvP</span></div>
+                <a href="https://www.badlion.net/" class="btn">visit website</a>
+            </div>
+            
+            <div class="client-card">
+                <div>
+                    <div class="client-name">future</div>
+                    <p class="client-desc">legendary paid client for high-stakes anarchy combat.</p>
+                </div>
+                <div class="tag-row"><span class="tag paid">Paid</span><span class="tag">Anarchy</span></div>
+                <a href="https://futureclient.net/" class="btn">visit website</a>
+            </div>
+        </div>
+
+        <div id="java-cracked-grid" class="client-grid hidden">
+                <div style="grid-column: 1 / -1; margin-bottom: 10px;">
+                <h2 style="font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 10px;">
+                    java cracked clients
+                </h2>
+                <p style="text-align: center; opacity: 0.85; font-size: 16px; font-weight: 300;">
+                    premium clients unlocked - no payment required
+                </p>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">vape v4 crack</div>
+                    <p class="client-desc">the legendary ghost client, completely free. undetectable bypasses and premium features unlocked.</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">Ghost</span></div>
+                <a href="https://mchccbackup.github.io/files/Clients/johnxina/vape-v4.17-cracked-123124.zip" class="btn">download</a>
+            </div>
+            
+            <div class="client-card">
+                <div>
+                    <div class="client-name">vape lite crack</div>
+                    <p class="client-desc">lightweight version of vape with essential ghost features for competitive pvp.</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">Ghost</span></div>
+                <a href="https://workupload.com/start/Ka3Xc37X8fp" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">augustus cracked</div>
+                    <p class="client-desc">premium ghost client unlocked with advanced features. previously flagged but clean - zip password is "rizz".</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Ghost</span>
+                    <span class="tag" style="background: rgba(255, 215, 0, 0.3); color: #ffffff;">password: rizz</span>
+                </div>
+                <a href="https://www.mediafire.com/file/f648ez4ft7anfmc/Augustus+launcher+password+rizz.zip/file" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">myau cracked</div>
+                    <p class="client-desc">premium client unlocked. excellent bypasses and features for free!</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">PvP</span></div>
+                <a href="https://mega.nz/file/2IFHVSiZ#Kh2xosBKn0lXelgGrC_YA8I729EaF-owQHASjQYN9Aw" class="btn">download</a>
+            </div>
+        </div>
+
+        <div id="rise-cracks-grid" class="client-grid hidden">
+                <div style="grid-column: 1 / -1; margin-bottom: 10px;">
+                <h2 style="font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 10px;">
+                    archived rise cracks
+                </h2>
+                <p style="text-align: center; opacity: 0.85; font-size: 16px; font-weight: 300;">
+                    complete collection of rise client cracks - all versions unlocked
+                </p>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.7.5</div>
+                    <p class="client-desc">the legendary rise client, completely free. premium bypasses, stunning visuals, and all features unlocked. latest version!</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag" style="background: rgba(255, 215, 0, 0.3); color: #ffffff;">latest</span>
+                    <span class="tag">Blatant</span>
+                </div>
+                <a href="https://www.mediafire.com/file/1vilvosumm56cdn/Rise_V6.7.5.zip/file" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.3.1</div>
+                    <p class="client-desc">stable legacy version with classic features and reliable performance for older servers.</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Legacy</span>
+                </div>
+                <a href="https://www.mediafire.com/file/4ibtdbatjmdhpfg/Rise_V6.3.1.zip/file" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.6.7</div>
+                    <p class="client-desc">enhanced bypasses for modern servers with improved stability and performance.</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Stable</span>
+                </div>
+                <a href="https://www.mediafire.com/file/08n1iaq0zb95b1h/Rise+v6+New.zip/file" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.6.8</div>
+                    <p class="client-desc">performance improvements and critical bug fixes for smoother gameplay.</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Optimized</span>
+                </div>
+                <a href="https://workupload.com/file/AgvszeXscuv" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.6.9</div>
+                    <p class="client-desc">latest bypasses with optimized movement modules and enhanced visuals.</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Enhanced</span>
+                </div>
+                <a href="https://workupload.com/file/6fYQCgcrWeJ" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.0</div>
+                    <p class="client-desc">original release with foundational features - the classic that started it all.</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Classic</span>
+                </div>
+                <a href="https://www.mediafire.com/file/08n1iaq0zb95b1h/Rise+v6+New.zip" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.6.6</div>
+                    <p class="client-desc">reliable version with smooth performance and excellent server compatibility.</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Reliable</span>
+                </div>
+                <a href="https://workupload.com/file/fNwZrLxDbem" class="btn">download</a>
+            </div>
+
+            <div class="client-card">
+                <div>
+                    <div class="client-name">rise 6.6.5</div>
+                    <p class="client-desc">popular version with great stability and community-tested features.</p>
+                </div>
+                <div class="tag-row">
+                    <span class="tag free">Free</span>
+                    <span class="tag">Popular</span>
+                </div>
+                <a href="https://drive.google.com/file/d/1g7miO8mmJKqtoIgpl8w2pAB5pO2yPBei/view?usp=sharing" class="btn">download</a>
+            </div>
+        </div>
+
+        <div id="bedrock-grid" class="client-grid hidden">
+            <div class="client-card">
+                <div>
+                    <div class="client-name">orphan</div>
+                    <p class="client-desc">advanced utility dll for the newest bedrock version updates. sadly discontinued.</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">1.21.124</span></div>
+                <a href="https://cdn.discordapp.com/attachments/1343460203777097730/1454041546461806655/Orphan.dll" class="btn">download dll</a>
+            </div>
+            
+            <div class="client-card">
+                <div>
+                    <div class="client-name">horion</div>
+                    <p class="client-desc">the king of bedrock utility. massive module list and command system.</p>
+                </div>
+                <div class="tag-row"><span class="tag free">Free</span><span class="tag">Essential</span></div>
+                <a href="https://horion.download/" class="btn">download</a>
+            </div>
+            
+            <div class="client-card">
+                <div>
+                    <div class="client-name">onix client</div>
+                    <p class="client-desc">the gold standard for bedrock performance. great ui and scripting.</p>
+                </div>
+                <div class="tag-row"><span class="tag paid">Paid</span><span class="tag">Stable</span></div>
+                <a href="https://onixclient.com/" class="btn">visit website</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showGrid(type) {
+            const grids = ['java', 'java-cracked', 'rise-cracks', 'bedrock'];
+            
+            grids.forEach(gridType => {
+                const grid = document.getElementById(gridType + '-grid');
+                const btn = document.getElementById('btn-' + gridType);
+                
+                if (grid) grid.classList.add('hidden');
+                if (btn) btn.classList.remove('active');
+            });
+            
+            const activeGrid = document.getElementById(type + '-grid');
+            const activeBtn = document.getElementById('btn-' + type);
+            
+            if (activeGrid) activeGrid.classList.remove('hidden');
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        function filterClients() {
+            let input = document.getElementById('searchBar').value.toLowerCase();
+            let activeGrid = document.querySelector('.client-grid:not(.hidden)');
+            let cards = activeGrid.getElementsByClassName('client-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let nameEl = cards[i].querySelector('.client-name');
+                let descEl = cards[i].querySelector('.client-desc');
+                if (!nameEl || !descEl) continue;
+                
+                let name = nameEl.innerText.toLowerCase();
+                let desc = descEl.innerText.toLowerCase();
+                if (name.includes(input) || desc.includes(input)) {
+                    cards[i].classList.remove('hidden');
+                } else {
+                    cards[i].classList.add('hidden');
+                }
+            }
+        }
+    </script>
+    <script>
+        (function(){
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function triggerBounce() {
+                if (prefersReduced) return;
+                const elems = Array.from(document.querySelectorAll('.client-card, .tab-btn, .btn, .tag, header, .client-name'));
+                elems.forEach((el, i) => {
+                    el.style.setProperty('--i', i);
+                    el.classList.add('animated');
+                });
+
+                document.documentElement.classList.add('do-bounce');
+
+                const total = elems.length * 65 + 900; // stagger + duration buffer
+                setTimeout(() => {
+                    document.documentElement.classList.remove('do-bounce');
+                    elems.forEach(el => el.style.removeProperty('--i'));
+                }, total);
+            }
+
+            document.addEventListener('click', (e) => {
+                // only trigger when clicking on background or the liquid-bg layer
+                const bg = document.querySelector('.liquid-bg');
+                const isBackgroundClick = e.target === document.body || e.target === bg || e.target.closest('.liquid-bg');
+                if (!isBackgroundClick) return;
+                // avoid triggering when clicking interactive elements
+                const interactive = e.target.closest('a, button, input, textarea, .client-card, .tab-btn, .btn');
+                if (interactive && interactive !== bg) return;
+                triggerBounce();
+            });
+        })();
+    </script>
+    <script>
+        // Tag download links at runtime and respect reduced-motion
+        (function(){
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            document.querySelectorAll('a.btn').forEach(a=>{
+                try {
+                    if (/download/i.test(a.innerText)) a.classList.add('download');
+                } catch(e){}
+            });
+        })();
+    </script>
+</body>
+</html>
